@@ -1,12 +1,16 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { createAnecdote } from '../requests'
+import { useNotificationDispatch } from '../NotificationContext'
 
 const AnecdoteForm = () => {
   const queryClient = useQueryClient()
+  const dispatch = useNotificationDispatch()
 
   const newAnecdoteMutation = useMutation(createAnecdote, {
     onSuccess: newAnecdote => {
       const anecdotes = queryClient.getQueryData('anecdotes')
+      dispatch({ type: 'ADD', payload: newAnecdote.content })
+      setTimeout(() => { dispatch('RESET') }, 5000)
       queryClient.setQueryData('anecdotes', anecdotes.concat(newAnecdote))
     }
   })
@@ -25,6 +29,7 @@ const AnecdoteForm = () => {
         <input name='anecdote' />
         <button type="submit">create</button>
       </form>
+      <br />
     </div>
   )
 }
