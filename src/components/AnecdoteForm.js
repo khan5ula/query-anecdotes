@@ -12,6 +12,10 @@ const AnecdoteForm = () => {
       dispatch({ type: 'ADD', payload: newAnecdote.content })
       setTimeout(() => { dispatch('RESET') }, 5000)
       queryClient.setQueryData('anecdotes', anecdotes.concat(newAnecdote))
+    },
+    onError: error => {
+      dispatch({ type: 'ERROR', payload: error.response.data.error })
+      setTimeout(() => { dispatch('RESET') }, 5000)
     }
   })
 
